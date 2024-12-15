@@ -1,20 +1,53 @@
-//function to separate incoming data into an array of arrays, each sub-array being one line
-//initialize a value safeReports = 0
-//loop through each sub-array in the array 
-//for each sub-array, loop through each digit 
-            // initalize array differences = []
-            // find the difference between each object[i] and object[i+1], store in [differences]
-            // loop through differences 
-                    // differences.array.every.math.sign = -1 or 1, continue, else return
-                    // differences.array.every != 0, continue, else return
-                    // differences.array.every <=3 OR >=-3, safeReports = ++
 
 
 function retrieveData() {
     const rawValues = document.querySelector('pre').innerText;
     // split the raw values down by line into strings for each report
-    const reports = rawValues.split('\n');
-    //map over each report, split the numbers by spaces, trim any trailing space, and convert each to a number
-    const data = reports.map((report=> report.split('').trim().map(Number)));
-    console.log("Data:", data);
+    const bigString = rawValues.split('\n');
+    //map over report string, split the numbers by spaces, trim any trailing space, and convert each to a number
+    const reports = bigString.map((string=> string.split(/\s+/).map(Number)));
+    
+    // console.log("reports:", reports)
+    return reports
 }
+
+
+let reports = retrieveData();
+
+function determineSafety() {
+
+
+    let safeReports = 0;
+
+    reports.forEach(report => {
+
+        const differences = [];
+        
+        for (let i = 0; i<report.length -1; i++) {
+        //stores the difference between each value and its neighbor in the array 'differences'
+            differences.push(report[i+1]-report[i]);
+        }
+        
+        //checks to see if all differences are increasing or decreasing   
+        const allIncreaseOrAllDecrease = differences.every(diff=> diff>0) || differences.every(diff=>diff<0);
+
+        //checks to see that no values are the same
+        const noStasis = differences.every(diff => diff!==0);
+          
+        //checks that all values are between -3 and 3
+        const safeRange = differences.every(diff => diff>=-3 && diff<=3);
+     
+     //increments count of safe report, if all conditions are met   
+     if (allIncreaseOrAllDecrease && noStasis && safeRange) {
+        safeReports++
+        console.log("Report:", report)
+        console.log("Differences:", differences)
+     };   
+}
+)
+return safeReports;
+}
+
+let safeReports = determineSafety();
+
+console.log("Total Number of safe reports:", safeReports);
