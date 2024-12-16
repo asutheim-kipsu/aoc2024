@@ -26,10 +26,11 @@ function determineSafety() {
         for (let i = 0; i<report.length -1; i++) {
         //stores the difference between each value and its neighbor in the array 'differences'
             differences.push(report[i+1]-report[i]);
+
         }
         
         //checks to see if all differences are increasing or decreasing   
-        const allIncreaseOrAllDecrease = differences.every(diff=> diff>0) || differences.every(diff=>diff<0);
+        const allIncreaseOrAllDecrease = differences.every(diff => diff > 0) || differences.every(diff => diff < 0);
 
         //checks to see that no values are the same
         const noStasis = differences.every(diff => diff!==0);
